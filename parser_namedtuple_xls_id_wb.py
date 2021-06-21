@@ -11,7 +11,7 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger('wb')
 
-
+# url = 'https://www.wildberries.ru/brands/gp/all'
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.111 YaBrowser/21.2.1.107 Yowser/2.5 Safari/537.36',
     'accept': '*/*'}
@@ -42,6 +42,8 @@ def get_html(url, params=None):
 
 def get_page_data(html):
     soup = BeautifulSoup(html, 'lxml')
+    #article, name, price, description = [], [], [], []
+    #print(soup)
 
     try:
         art = soup.find('div', class_='article').text.strip()
@@ -163,23 +165,7 @@ def main():
         print('-------------------------')
         #print('Артикул: ' + str(cell_obj.value) + ' Загружен')
         dd = date.today()
-        df = pd.DataFrame(result)
-        writer = pd.ExcelWriter(f'./wb/all_wb_{dd}.xlsx', engine='xlsxwriter')
-        df.to_excel(writer, sheet_name='report', index=False)
-        #print(df)
-        writer.save()
-
-        sales = pd.read_excel('./wb/report.XLSX', sheet_name='report')
-        states = pd.read_excel(f'./wb/all_wb_{dd}.xlsx', sheet_name='report')
-
-        result = pd.merge(sales, states, how='left', on='id')
-
-        #print(sales.head())
-        #print(states.head())
-
-        #print(result.head())
-
-
+        
         df = pd.DataFrame(result)
         writer = pd.ExcelWriter(f'./file/digital_{dd}.xlsx', engine='xlsxwriter')
         df.to_excel(writer, sheet_name='report', index=False)
