@@ -2,11 +2,13 @@ import requests
 from bs4 import BeautifulSoup
 import openpyxl
 import collections
-from datetime import date
+import datetime
 import xlsxwriter
 import pandas as pd
+import config
 import csv
 import logging
+import os
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger('wb')
@@ -134,7 +136,7 @@ def main():
 
     url_src = 'https://www.wildberries.ru/catalog/'
     url_src_1 = '/detail.aspx'
-    file = "./wb/report.XLSX"
+    file = f"{config.URL_report}report.XLSX"
 
 
     wb_obj = openpyxl.load_workbook(file)
@@ -164,10 +166,14 @@ def main():
 
         print('-------------------------')
         #print('Артикул: ' + str(cell_obj.value) + ' Загружен')
-        dd = date.today()
-        
+        #dd = date.today.strftime("%d.%m.%Y")
+        a = datetime.datetime.today().strftime("%d.%m.%Y")
+        #print(a)
+
+
+
         df = pd.DataFrame(result)
-        writer = pd.ExcelWriter(f'./file/digital_{dd}.xlsx', engine='xlsxwriter')
+        writer = pd.ExcelWriter(f'{config.URL_file}digital_{a}.xlsx', engine='xlsxwriter')
         df.to_excel(writer, sheet_name='report', index=False)
         # print(df)
         writer.save()
